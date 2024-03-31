@@ -1,4 +1,4 @@
-# Gerador de Numeros Sortidos
+# Gerador de Números Sortidos
 
 ### Objetivo
 Objetivo principal deste projeto é criar uma ferramenta que faça a geração de números sortidos. 
