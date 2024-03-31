@@ -1,0 +1,123 @@
+const MIN_VALUE = 1;
+const MAX_VALUE = 100;
+// Contar quantos elementos (números) serão exbidos no histórico
+const RECENT_NUMBERS_COUNT = 5;
+
+
+// Obter os elementos
+// Quais elementos eu preciso do HTML? 
+const sliderMin = document.getElementById('sliderMin');
+const sliderMax = document.getElementById('sliderMax');
+const botaoSortear = document.getElementById('botaoSortear');
+const numeroSorteado = document.getElementById('numeroSorteado');
+const listaNumeros = document.getElementById('listaNumeros');
+const botaoLimparHistorico = document.getElementById('botaoLimparHistorico');
+
+
+// Atualizar a interface com o valor do slider
+function atualizarValorSlider() {
+
+  const min = parseInt(sliderMin.value);
+  const max = parseInt(sliderMax.value);
+
+  //Exibir o valor do slider na interface
+  document.getElementById('valorMin').textContent = min;
+  document.getElementById('valorMax').textContent = max;
+  
+}
+
+// Eventos para atualizar o valor do slider ao ser alterado
+sliderMin.addEventListener('input', atualizarValorSlider);
+sliderMax.addEventListener('input', atualizarValorSlider);
+
+
+// Função para gerar um número aleatório
+function gerarNumeroAleatorio(min, max) {
+  if (min > max) {
+    return ('O valor mínimo deve ser menor ou igual ao valor máximo.');
+  }
+
+  /*  let numeroAleatorio = Math.random() * (max - min + 1);
+  numeroAleatorio = Math.floor(numeroAleatorio);
+  numeroAleatorio += min; */
+
+  // Forma contraída
+  let numeroAleatorio = Math.floor(Math.random() * (max - min + 1));
+  numeroAleatorio += min;
+
+  return numeroAleatorio;
+}
+
+// Atualizar a interface com o número sorteado
+function atualizarInterface(numeroSorteado) {
+  const numSorteado = document.getElementById('numeroSorteado');
+  numSorteado.textContent = numeroSorteado;
+
+
+}
+
+function adicionarAoHistorico(numeroSorteado) {
+
+  // Criar um elemento "li"
+  const li = document.createElement('li');
+
+  // Atribuir o número sorteado como conteúdo do "li"
+  li.textContent = numeroSorteado;
+
+  // Adicionar um evento de click ao "li"
+  li.addEventListener("click", function () {
+
+    // Copiar o número sorteado para a área de transferência
+    navigator.clipboard.writeText(numeroSorteado);
+
+    // Exibir um alerta informando que o número foi copiado
+    alert('Número copiado para a área de transferência!');
+  });
+
+  // Adicionar o "li" no início da lista de números ("listaNumeros")
+  listaNumeros.prepend(li);
+
+  // Se o número de elementos na lista for maior que o limite, remover o último elemento
+  if (listaNumeros.children.length > RECENT_NUMBERS_COUNT) {
+    listaNumeros.removeChild(listaNumeros.lastChild);
+  }
+}
+
+// Função para limpar o histórico de sorteios
+function limparHistorico() {
+  if (confirm('Deseja realmente limpar o histórico de sorteios?')) {
+    listaNumeros.innerHTML = '';
+    numeroSorteado.innerHTML = '0';
+
+  }
+}
+
+// Eventos
+
+/* botaoSortear.addEventListener("click", function() {
+  // Obter os valores dos sliders
+  var min = parseInt(sliderMin.value);
+  var max = parseInt(sliderMax.value);
+
+  // Gerar número aleatório
+  var numeroSorteado = gerarNumeroAleatorio(min, max);
+
+  // Atualizar interface
+  atualizarInterface(numeroSorteado);
+
+  // Adicionar ao histórico
+  adicionarAoHistorico(numeroSorteado);
+}); */
+
+botaoSortear.addEventListener("click", () => {
+
+  const min = parseInt(sliderMin.value);
+  const max = parseInt(sliderMax.value);
+
+  const numeroSorteado = gerarNumeroAleatorio(min, max);
+  atualizarInterface(numeroSorteado);
+  adicionarAoHistorico(numeroSorteado);
+});
+
+botaoLimparHistorico.addEventListener("click", limparHistorico);
+
